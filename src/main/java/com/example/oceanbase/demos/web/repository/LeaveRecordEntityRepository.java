@@ -9,8 +9,7 @@ import java.util.List;
 public interface LeaveRecordEntityRepository extends JpaRepository<LeaveRecordEntity, String> {
     LeaveRecordEntity findByRecordId(Integer recordId);
 
-    @Override
-    LeaveRecordEntity getById(String s);
+
 
     List<LeaveRecordEntity> findByUserIdAndState(Integer userId, int state);
 }
