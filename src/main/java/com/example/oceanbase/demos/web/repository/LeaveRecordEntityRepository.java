@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface LeaveRecordEntityRepository extends JpaRepository<LeaveRecordEntity, String> {
     LeaveRecordEntity findByRecordId(Integer recordId);
-    LeaveRecordEntity findByUserId(Integer userId);
 
     List<LeaveRecordEntity> findByUserIdAndState(Integer userId, int state);
 }
