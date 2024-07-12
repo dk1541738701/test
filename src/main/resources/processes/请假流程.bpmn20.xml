@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef" exporter="Flowable Open Source Modeler" exporterVersion="6.7.2">
+  <process id="apply_day" name="请假流程" isExecutable="true">
+    <startEvent id="start" flowable:formFieldValidation="true"></startEvent>
+    <userTask id="apply1" name="待申请"  flowable:assignee="${userId}" flowable:formFieldValidation="true">
+      <extensionElements>
+        <modeler:activiti-idm-initiator xmlns:modeler="http://flowable.org/modeler"><![CDATA[true]]></modeler:activiti-idm-initiator>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sid-9A335A79-2029-424F-91A0-FAC737C18500" sourceRef="start" targetRef="apply1"></sequenceFlow>
+    <exclusiveGateway id="roleJudge"></exclusiveGateway>
+    <userTask id="leaderApproval" name="团队长审批" flowable:candidateGroups="${team}" flowable:formFieldValidation="true"></userTask>
+    <exclusiveGateway id="judge1"></exclusiveGateway>
+    <userTask id="managerrApproval" name="经理审批" flowable:candidateGroups="${department}" flowable:formFieldValidation="true"></userTask>
+    <exclusiveGateway id="judge2"></exclusiveGateway>
+    <endEvent id="end"></endEvent>
+    <sequenceFlow id="line7" sourceRef="managerrApproval" targetRef="judge2"></sequenceFlow>
+    <sequenceFlow id="line10" name="批准" sourceRef="judge2" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approval==true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="line8" name="驳回" sourceRef="judge2" targetRef="leaderApproval">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${back=='leader'&&approval==false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="line4" sourceRef="leaderApproval" targetRef="judge1"></sequenceFlow>
+    <sequenceFlow id="line5" name="批准" sourceRef="judge1" targetRef="managerrApproval">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approval==true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="line2" sourceRef="roleJudge" targetRef="leaderApproval">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${role=='employee'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="line1" sourceRef="apply1" targetRef="roleJudge"></sequenceFlow>
+    <sequenceFlow id="line6" name="驳回" sourceRef="judge1" targetRef="apply1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approval==false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="line9" name="驳回" sourceRef="judge2" targetRef="apply1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${back!='leader'&&approval==false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="line3" name="发起人是团队长" sourceRef="roleJudge" targetRef="managerrApproval">
+      <documentation>发起人是团队长</documentation>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${role=='leader'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_apply_day">
+    <bpmndi:BPMNPlane bpmnElement="apply_day" id="BPMNPlane_apply_day">
+      <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
+        <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="163.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="apply1" id="BPMNShape_apply1">
+        <omgdc:Bounds height="80.0" width="100.0" x="175.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="roleJudge" id="BPMNShape_roleJudge">
+        <omgdc:Bounds height="40.0" width="40.0" x="320.0" y="158.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="leaderApproval" id="BPMNShape_leaderApproval">
+        <omgdc:Bounds height="80.0" width="100.0" x="405.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="judge1" id="BPMNShape_judge1">
+        <omgdc:Bounds height="40.0" width="40.0" x="550.0" y="158.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="managerrApproval" id="BPMNShape_managerrApproval">
+        <omgdc:Bounds height="80.0" width="100.0" x="629.9999906122686" y="134.99999798834327"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="judge2" id="BPMNShape_judge2">
+        <omgdc:Bounds height="40.0" width="40.0" x="774.9999906122686" y="154.99999798834327"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="28.0" width="28.0" x="859.9999906122686" y="160.99999798834327"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="line7" id="BPMNEdge_line7" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.5" flowable:targetDockerY="20.5">
+        <omgdi:waypoint x="729.9499906122662" y="175.21623175457702"></omgdi:waypoint>
+        <omgdi:waypoint x="775.4130340905294" y="175.41304146660414"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="line6" id="BPMNEdge_line6" flowable:sourceDockerX="20.39996510744095" flowable:sourceDockerY="29.00000038743019" flowable:targetDockerX="50.0" flowable:targetDockerY="79.0">
+        <omgdi:waypoint x="570.399965107441" y="197.54368709804498"></omgdi:waypoint>
+        <omgdi:waypoint x="570.399965107441" y="270.0000005662441"></omgdi:waypoint>
+        <omgdi:waypoint x="225.0" y="270.0000005662441"></omgdi:waypoint>
+        <omgdi:waypoint x="225.0" y="217.95000000000002"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="line5" id="BPMNEdge_line5" flowable:sourceDockerX="20.5" flowable:sourceDockerY="20.5" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="589.8320792505275" y="177.88053057697"></omgdi:waypoint>
+        <omgdi:waypoint x="629.9999906122686" y="176.59657438533398"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="line4" id="BPMNEdge_line4" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.5" flowable:targetDockerY="20.5">
+        <omgdi:waypoint x="504.9499999999977" y="178.21623376623376"></omgdi:waypoint>
+        <omgdi:waypoint x="550.4130434782554" y="178.41304347826085"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-9A335A79-2029-424F-91A0-FAC737C18500" id="BPMNEdge_sid-9A335A79-2029-424F-91A0-FAC737C18500" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="129.9499984899576" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="174.9999999999917" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="line10" id="BPMNEdge_line10" flowable:sourceDockerX="20.5" flowable:sourceDockerY="20.5" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="814.5591775520893" y="175.37820311654843"></omgdi:waypoint>
+        <omgdi:waypoint x="860.0002661647524" y="175.08884987260734"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="line9" id="BPMNEdge_line9" flowable:sourceDockerX="20.5" flowable:sourceDockerY="20.5" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="795.4999906122686" y="194.44009840488977"></omgdi:waypoint>
+        <omgdi:waypoint x="795.4999906122686" y="271.1110957783684"></omgdi:waypoint>
+        <omgdi:waypoint x="225.0" y="271.1110957783684"></omgdi:waypoint>
+        <omgdi:waypoint x="225.0" y="217.95000000000002"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="line8" id="BPMNEdge_line8" flowable:sourceDockerX="20.5" flowable:sourceDockerY="20.5" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="795.4999906122686" y="155.49999798834327"></omgdi:waypoint>
+        <omgdi:waypoint x="795.4999906122686" y="97.7777711760115"></omgdi:waypoint>
+        <omgdi:waypoint x="455.0" y="97.7777711760115"></omgdi:waypoint>
+        <omgdi:waypoint x="455.0" y="138.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="line3" id="BPMNEdge_line3" flowable:sourceDockerX="20.5" flowable:sourceDockerY="20.5" flowable:targetDockerX="50.0" flowable:targetDockerY="0.9999999999999716">
+        <omgdi:waypoint x="340.5" y="158.5"></omgdi:waypoint>
+        <omgdi:waypoint x="340.5" y="40.0"></omgdi:waypoint>
+        <omgdi:waypoint x="679.9999906122686" y="40.0"></omgdi:waypoint>
+        <omgdi:waypoint x="679.9999906122686" y="134.99999798834327"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="line2" id="BPMNEdge_line2" flowable:sourceDockerX="20.5" flowable:sourceDockerY="20.5" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="359.52473707273555" y="178.41666666666666"></omgdi:waypoint>
+        <omgdi:waypoint x="405.0" y="178.21812227074236"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="line1" id="BPMNEdge_line1" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.5" flowable:targetDockerY="20.5">
+        <omgdi:waypoint x="274.94999999999806" y="178.21623376623378"></omgdi:waypoint>
+        <omgdi:waypoint x="320.4130434782609" y="178.4130434782609"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

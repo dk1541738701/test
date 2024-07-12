@@ -1,0 +1,22 @@
+server:
+  port: 8088
+spring:
+  jpa:
+    database: mysql
+    show-sql: true
+
+#    hibernate:
+#      ddl-auto: update
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://obmtjs53tuaao4k0-mi.cn-hangzhou.oceanbase.aliyuncs.com:3306/practice?characterEncoding=UTF-8
+    username: user
+    password: DKdk990807
+
+jackson:
+  serialization:
+    indent_output: true
+
+flowable:
+  async-executor-activate: false
+  database-schema-update: true
