@@ -8,10 +8,10 @@ spring:
 #    hibernate:
 #      ddl-auto: update
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://obmtjs53tuaao4k0-mi.cn-hangzhou.oceanbase.aliyuncs.com:3306/practice?characterEncoding=UTF-8
-    username: user
-    password: DKdk990807
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?characterEncoding=UTF-8&serverTimezone=GMT%2B8&useSSL=false
+    username: root
+    password: dk990807
 
 jackson:
   serialization:
