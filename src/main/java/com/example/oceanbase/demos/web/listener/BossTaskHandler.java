@@ -9,7 +9,7 @@ public class BossTaskHandler implements TaskListener {
 
     @Override
     public void notify(DelegateTask delegateTask) {
-        delegateTask.setAssignee("boss");
+        delegateTask.setAssignee("老板");
     }
 
 }
